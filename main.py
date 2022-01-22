@@ -5,16 +5,17 @@ from PIL import Image
 
 #gen parameters
 variations = 6          #+1 to the actual files you have whyever idk dont want to look at it
-images_count = -1     #final count, set to -1 to generate all
+images_count = 100     #final count, set to -1 to generate all
 layers = 4              #before changing adapt coms+layers below
 
 
-#internal couters
+#internal vars
 skipped = 0
 generated = 0
 
 if images_count == -1:
     images_count = pow(variations - 1, layers)
+digits = sum(c.isdigit() for c in str(images_count))    #get count digits for clean output
 
 #create the filename by rolling a random number etc
 def generate_filename():
@@ -48,14 +49,14 @@ for i in range(images_count):
             rgb_im.save("./output/" + item + ".png")
 
         generated = generated + 1
-        print("[" + name + "] -> generated")
+        print("[" + str(name) + " | " + str(i+1).zfill(digits) + "/" + str(images_count) + "] -> generated")
     else:
         skipped = skipped + 1
-        print("[" + name + "] -> skipped")
+        print("[" + str(name) + " | " + str(i+1).zfill(digits) + "/" + str(images_count) + "] -> skipped")
         continue
 
 print("---------------------------"
       "\nFinal stats:"
-      "\nOrdered:   ",images_count,
-      "\nGenerated: ",generated,
-      "\nSkipped:   ",skipped)
+      "\nOrdered:   ", images_count,
+      "\nGenerated: ", generated,
+      "\nSkipped:   ", skipped)
