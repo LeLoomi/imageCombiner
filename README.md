@@ -11,4 +11,4 @@ For it to work you currently need the main.py in the same direcory as the follow
 - "layer4"  *> top layer, e.g. a hat or hair would go in here*
 - "output" *> the folder the script will output the product PNGs into*
 
-*Depending on your enviornment the names yould be case sensitive. The script uses numpy and Pillow*
+*Depending on your enviornment the names yould be case sensitive. The script uses numpy and Pillow.*
