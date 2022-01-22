@@ -24,9 +24,24 @@ def generate_filename_random():
     return name
 
 
-# list that contains all the names
+# lists that contain all the names and all the already existing files
 files_generated = []
 existing_files = os.listdir("./output/")
+
+
+def generate_image():
+    for item in files_generated:
+        layer1 = Image.open(f'./layer1/{item[0]}.png').convert('RGBA')
+        layer2 = Image.open(f'./layer2/{item[1]}.png').convert('RGBA')
+        layer3 = Image.open(f'./layer3/{item[2]}.png').convert('RGBA')
+        layer4 = Image.open(f'./layer4/{item[3]}.png').convert('RGBA')
+
+        com1 = Image.alpha_composite(layer1, layer2)
+        com2 = Image.alpha_composite(com1, layer3)
+        com3 = Image.alpha_composite(com2, layer4)
+
+        rgb_im = com3.convert('RGB')
+        rgb_im.save("./output/" + item + ".png")
 
 
 def generate_complete_collection():
@@ -51,18 +66,7 @@ def generate_complete_collection():
                             name + ".png") not in existing_files:  # check if file already exists (to skip)
                         files_generated.append(name)
 
-                        for item in files_generated:
-                            layer1 = Image.open(f'./layer1/{item[0]}.png').convert('RGBA')
-                            layer2 = Image.open(f'./layer2/{item[1]}.png').convert('RGBA')
-                            layer3 = Image.open(f'./layer3/{item[2]}.png').convert('RGBA')
-                            layer4 = Image.open(f'./layer4/{item[3]}.png').convert('RGBA')
-
-                            com1 = Image.alpha_composite(layer1, layer2)
-                            com2 = Image.alpha_composite(com1, layer3)
-                            com3 = Image.alpha_composite(com2, layer4)
-
-                            rgb_im = com3.convert('RGB')
-                            rgb_im.save("./output/" + item + ".png")
+                        generate_image()
 
                         generated_stat += 1
                         print("[" + str(name) + " | " + str(progress).zfill(digits) + "/" + str(
@@ -96,20 +100,10 @@ def generate_random_collection():
         if name not in files_generated and (name + ".png") not in existing_files:
             files_generated.append(name)
 
-            for item in files_generated:
-                layer1 = Image.open(f'./layer1/{item[0]}.png').convert('RGBA')
-                layer2 = Image.open(f'./layer2/{item[1]}.png').convert('RGBA')
-                layer3 = Image.open(f'./layer3/{item[2]}.png').convert('RGBA')
-                layer4 = Image.open(f'./layer4/{item[3]}.png').convert('RGBA')
+            generate_image()
 
-                com1 = Image.alpha_composite(layer1, layer2)
-                com2 = Image.alpha_composite(com1, layer3)
-                com3 = Image.alpha_composite(com2, layer4)
-
-                rgb_im = com3.convert('RGB')
-                rgb_im.save("./output/" + item + ".png")
-
-            print("[" + str(name) + " | " + str(progress_stat).zfill(digits) + "/" + str(order_count) + "] -> generated")
+            print(
+                "[" + str(name) + " | " + str(progress_stat).zfill(digits) + "/" + str(order_count) + "] -> generated")
             generated_stat += 1
 
         else:
@@ -123,18 +117,18 @@ def generate_random_collection():
 
     # to create the "missing" ones to actually gen 10 if 10 ordered by user
     if 0 < skipped <= pow(variations, layers):
-            order_count = skipped
-            skipped = 0
+        order_count = skipped
+        skipped = 0
 
-            generate_random_collection()
+        generate_random_collection()
 
 
 print("---------------------------"
       "\nSet up for", variations, "variations &", layers, "layers"
-      "\n\nSelect to continue:"
-      "\n 1: Create all possible combinations"
-      "\n 2: Create a random collection"
-      "\n 3: Exit program")
+                                                          "\n\nSelect to continue:"
+                                                          "\n 1: Create all possible combinations"
+                                                          "\n 2: Create a random collection"
+                                                          "\n 3: Exit program")
 
 while True:
     mode = input("Selection » ")
